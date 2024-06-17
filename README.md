@@ -28,7 +28,7 @@ Here's what we are left with:
 
 Bucket[i] always has the value of the last entry that has `hash % nbucket` equal to `i`
 
-```sh
+```
  i  bucket[i]  name of first symbol in chain
 --  ---------  -----------------------------
  0  3          carl
