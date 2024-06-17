@@ -77,6 +77,6 @@ gcc main.c -Wall -Wextra -Werror -Wpedantic -Wfatal-errors -g && \
 
 ## Credits
 
-My explanation is based on [flapenguin's great blog post](https://flapenguin.me/elf-dt-hash).
+My explanation is based on flapenguin's great blog post called [ELF: symbol lookup via DT_HASH](https://flapenguin.me/elf-dt-hash).
 
 The hash table implementation is taken from the code Linux uses to perform symbol lookup in ELF files. The Linux Foundation documentation is [here](https://refspecs.linuxfoundation.org/elf/gabi4+/ch5.dynamic.html#hash). 
