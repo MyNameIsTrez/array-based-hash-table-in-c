@@ -16,7 +16,7 @@ static size_t persons_size;
 
 static uint32_t buckets[BUCKET_COUNT];
 
-static uint32_t chains[MAX_PERSONS];
+static uint32_t chains[MAX_PERSONS + 1]; // +1, because [0] is a sentinel value
 static size_t chains_size;
 
 // From https://sourceware.org/git/?p=binutils-gdb.git;a=blob;f=bfd/elf.c#l193
@@ -51,8 +51,8 @@ static struct person *get_person(char *name) {
 }
 
 static void push_chain(uint32_t chain) {
-	if (chains_size >= MAX_PERSONS) {
-		fprintf(stderr, "There are more than %d symbols, exceeding MAX_PERSONS", MAX_PERSONS);
+	if (chains_size >= MAX_PERSONS + 1) {
+		fprintf(stderr, "There are more than %d chains, exceeding MAX_PERSONS + 1\n", MAX_PERSONS + 1);
 		exit(EXIT_FAILURE);
 	}
 	chains[chains_size++] = chain;
@@ -63,7 +63,7 @@ static void hash_persons(void) {
 
 	chains_size = 0;
 
-	push_chain(0); // The first entry in the chain is always STN_UNDEF
+	push_chain(0); // Sentinel value
 
 	for (size_t i = 0; i < persons_size; i++) {
 		uint32_t hash = elf_hash(persons[i].name);
@@ -77,7 +77,7 @@ static void hash_persons(void) {
 
 static void push_person(char *name, uint32_t age) {
 	if (persons_size >= MAX_PERSONS) {
-		fprintf(stderr, "There are more than %d persons, exceeding MAX_PERSONS", MAX_PERSONS);
+		fprintf(stderr, "There are more than %d persons, exceeding MAX_PERSONS\n", MAX_PERSONS);
 		exit(EXIT_FAILURE);
 	}
 	persons[persons_size++] = (struct person){ .name = name, .age = age };
