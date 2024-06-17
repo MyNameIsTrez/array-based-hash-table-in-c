@@ -6,6 +6,8 @@ The algorithm requires an array of items, like `["foo", "bar"]`. It decides how 
 
 ## Running
 
+If you edit the `#define BUCKET_COUNT 420` line to `#define BUCKET_COUNT 1`, you'll see that it still works!
+
 ```bash
 clear && \
 gcc main.c -Wall -Wextra -Werror -Wpedantic -Wfatal-errors -g && \

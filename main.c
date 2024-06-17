@@ -4,6 +4,7 @@
 #include <string.h>
 
 #define MAX_PERSONS 420420
+#define BUCKET_COUNT 420
 
 struct person {
 	char *name;
@@ -13,15 +14,10 @@ struct person {
 static struct person persons[MAX_PERSONS];
 static size_t persons_size;
 
-static uint32_t buckets[MAX_PERSONS];
+static uint32_t buckets[BUCKET_COUNT];
 
 static uint32_t chains[MAX_PERSONS];
 static size_t chains_size;
-
-static struct person *get_person(char *name) {
-	(void)name;
-	return &(struct person){0};
-}
 
 // From https://sourceware.org/git/?p=binutils-gdb.git;a=blob;f=bfd/elf.c#l193
 static uint32_t elf_hash(const char *namearg) {
@@ -33,6 +29,27 @@ static uint32_t elf_hash(const char *namearg) {
 	return h & 0x0fffffff;
 }
 
+static struct person *get_person(char *name) {
+	uint32_t hash = elf_hash(name);
+	uint32_t bucket_index = hash % BUCKET_COUNT;
+
+	uint32_t ix = buckets[bucket_index];
+
+	while (1) {
+		if (ix == 0) {
+			return NULL;
+		}
+
+		if (strcmp(name, persons[ix - 1].name) == 0) {
+			break;
+		}
+
+		ix = chains[ix];
+	}
+
+	return persons + ix - 1;
+}
+
 static void push_chain(uint32_t chain) {
 	if (chains_size >= MAX_PERSONS) {
 		fprintf(stderr, "There are more than %d symbols, exceeding MAX_PERSONS", MAX_PERSONS);
@@ -42,9 +59,7 @@ static void push_chain(uint32_t chain) {
 }
 
 static void hash_persons(void) {
-	uint32_t nbucket = persons_size;
-
-	memset(buckets, 0, nbucket * sizeof(uint32_t));
+	memset(buckets, 0, BUCKET_COUNT * sizeof(uint32_t));
 
 	chains_size = 0;
 
@@ -52,20 +67,12 @@ static void hash_persons(void) {
 
 	for (size_t i = 0; i < persons_size; i++) {
 		uint32_t hash = elf_hash(persons[i].name);
-		uint32_t bucket_index = hash % nbucket;
+		uint32_t bucket_index = hash % BUCKET_COUNT;
 
 		push_chain(buckets[bucket_index]);
 
 		buckets[bucket_index] = i + 1;
 	}
-
-	// for (size_t i = 0; i < nbucket; i++) {
-	// 	push_number(buckets[i], 4);
-	// }
-
-	// for (size_t i = 0; i < chains_size; i++) {
-	// 	push_number(chains[i], 4);
-	// }
 }
 
 static void push_person(char *name, uint32_t age) {
