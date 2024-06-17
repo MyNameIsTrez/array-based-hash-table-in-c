@@ -20,29 +20,49 @@ Let's assume that `#define BUCKET_COUNT 420` has been changed from 420 to 2 for 
 3. `carl`, with an age of 69
 
 The program hashes the person structs based on their names, so let's assume a simplified `hash()` function:
-1. `hash("trez")` return 0
-2. `hash("john")` return 1
-3. `hash("carl")` return 0
+1. `hash("trez")` returns 0
+2. `hash("john")` returns 1
+3. `hash("carl")` returns 0
 
-Here's what we are left with:
+Here's how those hashes are used to give `buckets` and `chains` their values, where `nbucket` is `BUCKET_COUNT`:
 
 ```
-Bucket[i] always has the value of the last entry that has `hash % nbucket` equal to `i`
+Bucket[i] always has the value of the last entry that has `bucket_index` equal to `i`
 
- i  bucket[i]  name of first symbol in chain
---  ---------  -----------------------------
- 0  3          carl
- 1  2          john
+ i  buckets[i]  name of first symbol in chain
+--  ----------  -----------------------------
+ 0  3           carl
+ 1  2           john
 
 One asterisk * indicates the start of a chain
 
-    name =          | hash =      bucket_index =
- i  persons[i].name | hash(name)  hash % nbucket  graph
---  --------------- | ----------  --------------  -----
- 0  <SENTINEL>      |
- 1  trez            |  0          0               0 <-\
- 2  john            |  1          1 *             0   |
- 3  carl            |  0          0 *             1 --/
+    name =            | hash =      bucket_index =  chain =
+ i  persons[i-1].name | hash(name)  hash % nbucket  chains[i]
+--  ----------------- | ----------  --------------  ---------
+ 0  <SENTINEL>        |
+ 1  trez              |  0          0               0 <-\
+ 2  john              |  1          1 *             0   |
+ 3  carl              |  0          0 *             1 --/
+```
+
+Let's test this table using `get_person()` its algorithm:
+
+1. `john`:
+```
+hash = hash("john") = 1
+chain starts at buckets[1 % 2] = bucket[1] = 2
+
+persons[2-1].name (= "john") == "john"? yes => "john" found at persons index 1
+```
+
+2. `bob`:
+```
+hash = hash("bob") = 0
+chain starts at buckets[0 % 2] = bucket[0] = 3
+
+persons[3-1].name (= "carl") == "bob"? no => chain continues at i=1
+persons[1-1].name (= "trez") == "bob"? no => chain continues at i=0
+i=0 is the sentinel index, so "bob" is not in the hash table
 ```
 
 ## Running
@@ -57,4 +77,6 @@ gcc main.c -Wall -Wextra -Werror -Wpedantic -Wfatal-errors -g && \
 
 ## Credits
 
-The hash table implementation is taken from the code Linux uses to perform symbol lookup in ELF files. The Linux Foundation documentation is [here](https://refspecs.linuxfoundation.org/elf/gabi4+/ch5.dynamic.html#hash), and flapenguin explains it well [here](https://flapenguin.me/elf-dt-hash).
+My explanation is based on [flapenguin's great blog post](https://flapenguin.me/elf-dt-hash).
+
+The hash table implementation is taken from the code Linux uses to perform symbol lookup in ELF files. The Linux Foundation documentation is [here](https://refspecs.linuxfoundation.org/elf/gabi4+/ch5.dynamic.html#hash). 
