@@ -19,7 +19,7 @@ Let's assume that `#define BUCKET_COUNT 420` has been changed from 420 to 2 for 
 2. `john`, with an age of 42
 3. `carl`, with an age of 69
 
-The program hashes the person structs based on their names, so let's assume a simplified `hash()` function:
+The program hashes the person structs based on their names, so let's use an imaginary `hash()` function:
 1. `hash("trez")` returns 0
 2. `hash("john")` returns 1
 3. `hash("carl")` returns 0
@@ -49,7 +49,7 @@ Let's test this table using `get_person()` its algorithm:
 
 1. `john`:
 ```
-hash = hash("john") = 1
+hash("john") = 1
 chain starts at buckets[1 % 2] = bucket[1] = 2
 
 persons[2-1].name (= "john") == "john"? yes => "john" found at persons index 1
@@ -57,7 +57,7 @@ persons[2-1].name (= "john") == "john"? yes => "john" found at persons index 1
 
 2. `bob`:
 ```
-hash = hash("bob") = 0
+hash("bob") = 0
 chain starts at buckets[0 % 2] = bucket[0] = 3
 
 persons[3-1].name (= "carl") == "bob"? no => chain continues at i=1
