@@ -16,7 +16,8 @@ static size_t persons_size;
 
 static uint32_t buckets[BUCKET_COUNT];
 
-static uint32_t chains[MAX_PERSONS + 1]; // +1, because [0] is a sentinel value
+#define MAX_CHAINS (MAX_PERSONS + 1) // +1, because [0] is a sentinel value
+static uint32_t chains[MAX_CHAINS];
 static size_t chains_size;
 
 // From https://sourceware.org/git/?p=binutils-gdb.git;a=blob;f=bfd/elf.c#l193
@@ -51,8 +52,8 @@ static struct person *get_person(char *name) {
 }
 
 static void push_chain(uint32_t chain) {
-	if (chains_size >= MAX_PERSONS + 1) {
-		fprintf(stderr, "There are more than %d chains, exceeding MAX_PERSONS + 1\n", MAX_PERSONS + 1);
+	if (chains_size >= MAX_CHAINS) {
+		fprintf(stderr, "There are more than %d chains, exceeding MAX_CHAINS\n", MAX_CHAINS);
 		exit(EXIT_FAILURE);
 	}
 	chains[chains_size++] = chain;
