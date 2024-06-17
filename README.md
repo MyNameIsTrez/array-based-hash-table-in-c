@@ -26,9 +26,9 @@ The program hashes the person structs based on their names, so let's assume a si
 
 Here's what we are left with:
 
+```
 Bucket[i] always has the value of the last entry that has `hash % nbucket` equal to `i`
 
-```
  i  bucket[i]  name of first symbol in chain
 --  ---------  -----------------------------
  0  3          carl
@@ -55,6 +55,6 @@ gcc main.c -Wall -Wextra -Werror -Wpedantic -Wfatal-errors -g && \
 ./a.out
 ```
 
-## Further reading
+## Credits
 
 The hash table implementation is taken from the code Linux uses to perform symbol lookup in ELF files. The Linux Foundation documentation is [here](https://refspecs.linuxfoundation.org/elf/gabi4+/ch5.dynamic.html#hash), and flapenguin explains it well [here](https://flapenguin.me/elf-dt-hash).
