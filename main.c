@@ -87,12 +87,12 @@ static void push_person(char *name, uint32_t age) {
 int main(void) {
 	push_person("trez", 7);
 	push_person("john", 42);
-	push_person("bob", 69);
+	push_person("carl", 69);
 
 	hash_persons();
 
 	printf("%d\n", get_person("trez")->age);
 	printf("%d\n", get_person("john")->age);
-	printf("%d\n", get_person("bob")->age);
-	printf("%p\n", (void *)get_person("carl"));
+	printf("%d\n", get_person("carl")->age);
+	printf("%p\n", (void *)get_person("bob"));
 }
