@@ -28,6 +28,7 @@ Here's what we are left with:
 
 Bucket[i] always has the value of the last entry that has `hash % nbucket` equal to `i`
 
+```bash
  i  bucket[i]  name of first symbol in chain
 --  ---------  -----------------------------
  0  3          carl
@@ -42,6 +43,7 @@ One asterisk * indicates the start of a chain
  1  trez            |  0          0               0 <-\
  2  john            |  1          1 *             0   |
  3  carl            |  0          0 *             1 --/
+```
 
 ## Running
 
