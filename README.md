@@ -14,7 +14,7 @@ When you want to look for a value in an array, looping over it is simple and fas
 
 Hash tables are incredibly useful for turning code that does an `O(n)` iteration over an entire array, into an `O(1)` operation that (on average) instantly finds the element, no matter the size of the array.
 
-It is important to keep in mind that iterating an array is most of the time going to be much faster in practice, since it is so simple. For this reason I recommend only upgrading arrays to hash tables in C once a profiler indicates iterating an array to be the cause of performance issues.
+It is important to keep in mind that iterating an array is most of the time going to be much faster in practice, since it is so simple. For this reason, and because the array version will be easier to read, I recommend only upgrading arrays to hash tables in C once a performance profiler indicates it to be necessary.
 
 ## High-level explanation
 
