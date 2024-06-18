@@ -31,21 +31,22 @@ static double get_elapsed_seconds(struct timespec start, struct timespec end) {
 	return (double)(end.tv_sec - start.tv_sec) + 1.0e-9 * (double)(end.tv_nsec - start.tv_nsec);
 }
 
-static void time_array(size_t persons_size) {
-	assert(persons_size <= MAX_PERSONS);
+static void time_array(size_t limit) {
+	size_t hits = 0;
 
 	struct timespec start;
 	clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &start);
 
 	for (size_t i = 0; i < ROUNDS; i++) {
-		size_t goal_index = rand() % persons_size;
+		char *goal_name = names[rand() % limit];
 
 		// The actual algorithm that we want to time
-		for (size_t i = 0; i < goal_index; i++) {
+		for (size_t i = 0; i < limit; i++) {
 			struct person person = persons[i];
 
-			if (strcmp(person.name, "bob") == 0) {
-				printf("Unreachable\n");
+			if (strcmp(person.name, goal_name) == 0) {
+				hits++;
+				break;
 			}
 		}
 	}
@@ -53,7 +54,7 @@ static void time_array(size_t persons_size) {
 	struct timespec end;
 	clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &end);
 
-	printf("time_array(%zu) took %.2f seconds\n", persons_size, get_elapsed_seconds(start, end));
+	printf("time_array(%zu) had %zu/%d hits, taking %.2f seconds\n", limit, hits, ROUNDS, get_elapsed_seconds(start, end));
 }
 
 // From https://sourceware.org/git/?p=binutils-gdb.git;a=blob;f=bfd/elf.c#l193
@@ -88,20 +89,22 @@ static struct person *get_person(char *name) {
 }
 
 static void time_hash_table(void) {
+	size_t hits = 0;
+
 	struct timespec start;
 	clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &start);
 
 	for (size_t i = 0; i < ROUNDS; i++) {
 		// The actual algorithm that we want to time
-		if (get_person("bob")) {
-			printf("Unreachable\n");
+		if (get_person(names[rand() % MAX_PERSONS])) {
+			hits++;
 		}
 	}
 
 	struct timespec end;
 	clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &end);
 
-	printf("time_hash_table() took %.2f seconds\n", get_elapsed_seconds(start, end));
+	printf("time_hash_table() had %zu/%d hits, taking %.2f seconds\n", hits, ROUNDS, get_elapsed_seconds(start, end));
 }
 
 static void push_chain(uint32_t chain) {
