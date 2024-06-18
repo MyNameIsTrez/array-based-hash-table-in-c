@@ -8,7 +8,7 @@
 #include <string.h>
 #include <time.h>
 
-#define MAX_PERSONS 123456789
+#define MAX_PERSONS 12345678
 #define ROUNDS 10000
 
 struct person {
@@ -16,12 +16,8 @@ struct person {
 	uint32_t age;
 };
 
-static char *names[] = {
-	"trez",
-	"john",
-	"carl",
-};
-#define NAMES_SIZE (sizeof(names) / sizeof(*names))
+// The name for person 123 will be "123", where the +1 is for the '\0'
+static char names[MAX_PERSONS][8 + 1];
 
 static struct person persons[MAX_PERSONS];
 static size_t persons_size;
@@ -33,6 +29,31 @@ static size_t chains_size;
 
 static double get_elapsed_seconds(struct timespec start, struct timespec end) {
 	return (double)(end.tv_sec - start.tv_sec) + 1.0e-9 * (double)(end.tv_nsec - start.tv_nsec);
+}
+
+static void time_array(size_t persons_size) {
+	assert(persons_size <= MAX_PERSONS);
+
+	struct timespec start;
+	clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &start);
+
+	for (size_t i = 0; i < ROUNDS; i++) {
+		size_t goal_index = rand() % persons_size;
+
+		// The actual algorithm that we want to time
+		for (size_t i = 0; i < goal_index; i++) {
+			struct person person = persons[i];
+
+			if (strcmp(person.name, "bob") == 0) {
+				printf("Unreachable\n");
+			}
+		}
+	}
+
+	struct timespec end;
+	clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &end);
+
+	printf("time_array(%zu) took %.2f seconds\n", persons_size, get_elapsed_seconds(start, end));
 }
 
 // From https://sourceware.org/git/?p=binutils-gdb.git;a=blob;f=bfd/elf.c#l193
@@ -66,14 +87,12 @@ static struct person *get_person(char *name) {
 	return persons + i;
 }
 
-static void time_hash_table(size_t persons_size) {
-	assert(persons_size <= MAX_PERSONS);
-
+static void time_hash_table(void) {
 	struct timespec start;
 	clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &start);
 
 	for (size_t i = 0; i < ROUNDS; i++) {
-		// TODO: The persons array needs to have equal distribution
+		// The actual algorithm that we want to time
 		if (get_person("bob")) {
 			printf("Unreachable\n");
 		}
@@ -82,32 +101,7 @@ static void time_hash_table(size_t persons_size) {
 	struct timespec end;
 	clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &end);
 
-	printf("table(%zu) took %.2f seconds\n", persons_size, get_elapsed_seconds(start, end));
-}
-
-static void time_array(size_t persons_size) {
-	assert(persons_size <= MAX_PERSONS);
-
-	struct timespec start;
-	clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &start);
-
-	for (size_t i = 0; i < ROUNDS; i++) {
-		size_t goal_index = rand() % persons_size;
-
-		// The actual algorithm being tested
-		for (size_t i = 0; i < goal_index; i++) {
-			struct person person = persons[i];
-
-			if (strcmp(person.name, "bob") == 0) {
-				printf("Unreachable\n");
-			}
-		}
-	}
-
-	struct timespec end;
-	clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &end);
-
-	printf("array(%zu) took %.2f seconds\n", persons_size, get_elapsed_seconds(start, end));
+	printf("time_hash_table() took %.2f seconds\n", get_elapsed_seconds(start, end));
 }
 
 static void push_chain(uint32_t chain) {
@@ -141,11 +135,40 @@ static void push_person(char *name, uint32_t age) {
 	persons[persons_size++] = (struct person){ .name = name, .age = age };
 }
 
-int main(void) {
-	for (size_t i = 0; i < MAX_PERSONS; i++) {
-		push_person(names[rand() % NAMES_SIZE], rand() % UINT32_MAX);
+static size_t pow10_size(size_t count) {
+	size_t result = 1;
+	for (size_t i = 0; i < count; i++) {
+		result *= 10;
 	}
+	return result;
+}
+
+int main(void) {
+	srand(time(NULL));
+
+	printf("With MAX_PERSONS equal to %d\n", MAX_PERSONS);
+	printf("With ROUNDS equal to %d\n\n", ROUNDS);
+
+	// Makes sure names[42] will be "00000042"
+	for (size_t p = 0; p < MAX_PERSONS; p++) {
+		for (size_t c = 0; c < 8; c++) {
+			names[p][7-c] = '0' + (p / pow10_size(c)) % 10;
+		}
+		names[p][8] = '\0';
+	}
+	printf("names[42] is %s\n", names[42]);
+	printf("names[MAX_PERSONS-1] is %s\n\n", names[MAX_PERSONS-1]);
+
+	for (size_t i = 0; i < MAX_PERSONS; i++) {
+		push_person(names[rand() % MAX_PERSONS], rand() % UINT32_MAX);
+	}
+	printf("persons[42].name is %s\n", persons[42].name);
+	printf("persons[MAX_PERSONS-1].name is %s\n\n", persons[MAX_PERSONS-1].name);
+
 	hash_persons();
+
+	time_hash_table();
+	printf("\n");
 
 	time_array(1);
 	time_array(10);
@@ -153,14 +176,4 @@ int main(void) {
 	time_array(1000);
 	time_array(10000);
 	time_array(100000);
-
-	time_hash_table(1);
-	time_hash_table(10);
-	time_hash_table(100);
-	time_hash_table(1000);
-	time_hash_table(10000);
-	time_hash_table(100000);
-	time_hash_table(1000000);
-	time_hash_table(10000000);
-	time_hash_table(100000000);
 }

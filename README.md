@@ -86,7 +86,11 @@ i=-1 is the sentinel index, so "bob" is not in the hash table
 
 Hash tables are hard to profile, since you would ideally test many combinations of insertions, deletions, and searching.
 
-In this case however we're assuming that the hash table is only built once the entire array is never going to be modified again, so here we just profile how long it takes for the search to figure out that an element isn't present in the array:
+In this case however we're assuming that the hash table is only built once the entire array is never going to be modified again, so here we just profile how long it takes for the search to figure out that an element isn't present in the array.
+
+The important takeaway here is that given enough memory, a hash table will always take pretty much zero time, whereas an array takes a noticeable amount of time between `time_array(100)` and `time_array(1000)`:
+
+![Screenshot of profiling](profile.png)
 
 Here's the command I used to produce this screenshot:
 
