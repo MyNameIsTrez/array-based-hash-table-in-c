@@ -34,21 +34,21 @@ static struct person *get_person(char *name) {
 	uint32_t hash = elf_hash(name);
 	uint32_t bucket_index = hash % BUCKET_COUNT;
 
-	uint32_t ix = buckets[bucket_index];
+	uint32_t i = buckets[bucket_index];
 
 	while (1) {
-		if (ix == 0) {
+		if (i == 0) {
 			return NULL;
 		}
 
-		if (strcmp(name, persons[ix - 1].name) == 0) {
+		if (strcmp(name, persons[i - 1].name) == 0) {
 			break;
 		}
 
-		ix = chains[ix];
+		i = chains[i];
 	}
 
-	return persons + ix - 1;
+	return persons + i - 1;
 }
 
 static void push_chain(uint32_t chain) {
