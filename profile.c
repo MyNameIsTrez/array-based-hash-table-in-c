@@ -149,8 +149,8 @@ static size_t pow10_size(size_t count) {
 int main(void) {
 	srand(time(NULL));
 
-	printf("With MAX_PERSONS equal to %d\n", MAX_PERSONS);
-	printf("With ROUNDS equal to %d\n\n", ROUNDS);
+	printf("MAX_PERSONS is %d\n", MAX_PERSONS);
+	printf("ROUNDS is %d\n\n", ROUNDS);
 
 	// Makes sure names[42] will be "00000042"
 	for (size_t p = 0; p < MAX_PERSONS; p++) {
