@@ -36,13 +36,12 @@ Bucket[i] has the value of the last entry that has bucket_index equal to i
 
 One asterisk * indicates the start of a chain
 
-    name =            | hash =      bucket_index =  chain =
- i  persons[i-1].name | hash(name)  hash % nbucket  chains[i-1]
---  ----------------- | ----------  --------------  -----------
- 0  <SENTINEL>        |
- 1  trez              |  42         0               0 <-\
- 2  john              |  69         1 *             0   |
- 3  carl              |  38         0 *             1 --/
+    name =          | hash =      bucket_index =  chain =
+ i  persons[i].name | hash(name)  hash % nbucket  chains[i]
+--  --------------- | ----------  --------------  ---------
+ 0  trez            |  42         0               -1 <-\
+ 1  john            |  69         1 *             -1   |
+ 2  carl            |  38         0 *              0 --/
 ```
 
 Let's verify this table, using the algorithm `get_person()` in `main.c` uses:
@@ -52,7 +51,7 @@ Let's verify this table, using the algorithm `get_person()` in `main.c` uses:
 hash("john") = 69
 chain starts at buckets[69 % 2] = buckets[1] = 2
 
-persons[2-1].name (= "john") == "john"? yes => "john" found at persons index 1
+persons[1].name (= "john") == "john"? yes => "john" found at persons[1]
 ```
 
 2. `bob`:
@@ -60,9 +59,9 @@ persons[2-1].name (= "john") == "john"? yes => "john" found at persons index 1
 hash("bob") = 420
 chain starts at buckets[420 % 2] = buckets[0] = 3
 
-persons[3-1].name (= "carl") == "bob"? no => chain continues at i=1
-persons[1-1].name (= "trez") == "bob"? no => chain continues at i=0
-i=0 is the sentinel index, so "bob" is not in the hash table
+persons[2].name (= "carl") == "bob"? no => chain continues at i=0
+persons[0].name (= "trez") == "bob"? no => chain continues at i=-1
+i=-1 is the sentinel index, so "bob" is not in the hash table
 ```
 
 ## Running
