@@ -1,4 +1,6 @@
-# Hash table in C
+# Array-based hash table in C
+
+The [hash table](https://en.m.wikipedia.org/wiki/Hash_table) requires you to have an array of items that you want to hash. `main.c` contains a `persons` array of `person`. Each person has a name and an age.
 
 The [pigeonhole principle](https://en.wikipedia.org/wiki/Pigeonhole_principle) tells us that if we have 3 persons, and we're trying to fit them into 2 buckets, at least one bucket must contain more than one person.
 
@@ -7,8 +9,6 @@ In order to fit more than one person in each bucket, each bucket is a linked lis
 Usually linked lists are implemented by having every node be `malloc()`ed separately, but `main.c` manages to do it with just has a single, global `buckets` and `chains` array.
 
 I made these arrays are global in order to make the code easier to read, but you could of course just pass them as arguments to the functions.
-
-The hash table requires you to have an array of items that you want to hash. `main.c` contains a `persons` array of `person`. Each person has a name and an age.
 
 ## How it works
 
