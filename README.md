@@ -29,7 +29,7 @@ Here's how those hashes are used to give `buckets` and `chains` their values, wh
 ```
 Bucket[i] has the value of the last entry that has bucket_index equal to i
 
- i  buckets[i]  name of first symbol in chain
+ i  buckets[i]  name of first person in chain
 --  ----------  -----------------------------
  0  3           carl
  1  2           john
