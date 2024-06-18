@@ -27,7 +27,7 @@ The program hashes the person structs based on their names, so let's use an imag
 Here's how those hashes are used to give `buckets` and `chains` their values, where `nbucket` is `BUCKET_COUNT`:
 
 ```
-Bucket[i] always has the value of the last entry that has `bucket_index` equal to `i`
+Bucket[i] always has the value of the last entry that has bucket_index equal to i
 
  i  buckets[i]  name of first symbol in chain
 --  ----------  -----------------------------
