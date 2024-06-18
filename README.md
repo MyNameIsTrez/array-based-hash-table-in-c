@@ -67,13 +67,13 @@ i=0 is the sentinel index, so "bob" is not in the hash table
 
 ## Running
 
-If you edit the `#define BUCKET_COUNT 420` line to `#define BUCKET_COUNT 1`, you'll see that it still works!
-
 ```bash
 clear && \
 gcc main.c -Wall -Wextra -Werror -Wpedantic -Wfatal-errors -g && \
 ./a.out
 ```
+
+If you edit the `#define BUCKET_COUNT 420` line to `#define BUCKET_COUNT 1`, you'll see that it still works!
 
 ## Credits
 
