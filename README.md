@@ -20,7 +20,7 @@ It is important to keep in mind that iterating an array is most of the time goin
 
 This [hash table](https://en.m.wikipedia.org/wiki/Hash_table) requires you to have an array of items that you want to hash. `main.c` contains a `persons` array of `person` structs. Each person has a name and an age.
 
-The [pigeonhole principle](https://en.wikipedia.org/wiki/Pigeonhole_principle) tells us that if we have 3 persons, and we're trying to fit them into 2 buckets, at least one bucket must contain more than one person.
+The [pigeonhole principle](https://en.wikipedia.org/wiki/Pigeonhole_principle) tells us that if we have 3 persons, and we're trying to fit them into 2 buckets, at least one of the buckets must contain more than one person.
 
 In order to fit more than one person in each bucket, each bucket is a linked list.
 
