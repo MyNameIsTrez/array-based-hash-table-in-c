@@ -24,7 +24,7 @@ The program hashes the person structs based on their names, so let's use an imag
 2. `hash("john")` returns 69
 3. `hash("carl")` returns 38
 
-Here's how those hashes are used to give `buckets` and `chains` their values, where `nbucket` is `BUCKET_COUNT`, and `<SENTINEL>` is a [sentinel value](https://en.wikipedia.org/wiki/Sentinel_value).
+Here's how those hashes are used to give `buckets` and `chains` their values, where `nbucket` is `BUCKET_COUNT`, and `-1` is the [sentinel value](https://en.wikipedia.org/wiki/Sentinel_value).
 
 ```
 Bucket[i] has the value of the last entry that has bucket_index equal to i
