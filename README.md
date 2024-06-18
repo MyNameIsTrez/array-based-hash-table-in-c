@@ -82,6 +82,20 @@ persons[0].name (= "trez") == "bob"? no => chain continues at i=-1
 i=-1 is the sentinel index, so "bob" is not in the hash table
 ```
 
+## Profiling this hash table against an array
+
+Hash tables are hard to profile, since you would ideally test many combinations of insertions, deletions, and searching.
+
+In this case however we're assuming that the hash table is only built once the entire array is never going to be modified again, so here we just profile how long it takes for the search to figure out that an element isn't present in the array:
+
+Here's the command I used to produce this screenshot:
+
+```bash
+clear && \
+gcc profile.c -Wall -Wextra -Werror -Wpedantic -Wfatal-errors -g -Ofast -march=native && \
+./a.out
+```
+
 ## Credits
 
 My explanation is based on flapenguin's great blog post called [ELF: symbol lookup via DT_HASH](https://flapenguin.me/elf-dt-hash).
