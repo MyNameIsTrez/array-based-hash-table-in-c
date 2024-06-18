@@ -36,18 +36,18 @@ static struct person *get_person(char *name) {
 	uint32_t i = buckets[bucket_index];
 
 	while (1) {
-		if (i == 0) {
+		if (i == UINT32_MAX) {
 			return NULL;
 		}
 
-		if (strcmp(name, persons[i - 1].name) == 0) {
+		if (strcmp(name, persons[i].name) == 0) {
 			break;
 		}
 
-		i = chains[i - 1];
+		i = chains[i];
 	}
 
-	return persons + i - 1;
+	return persons + i;
 }
 
 static void push_chain(uint32_t chain) {
@@ -59,7 +59,7 @@ static void push_chain(uint32_t chain) {
 }
 
 static void hash_persons(void) {
-	memset(buckets, 0, BUCKET_COUNT * sizeof(uint32_t));
+	memset(buckets, UINT32_MAX, BUCKET_COUNT * sizeof(uint32_t));
 
 	chains_size = 0;
 
@@ -69,7 +69,7 @@ static void hash_persons(void) {
 
 		push_chain(buckets[bucket_index]);
 
-		buckets[bucket_index] = i + 1;
+		buckets[bucket_index] = i;
 	}
 }
 
