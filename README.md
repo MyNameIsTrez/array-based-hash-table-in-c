@@ -1,5 +1,23 @@
 # Array-based hash table in C
 
+Try it:
+
+```bash
+clear && \
+gcc main.c -Wall -Wextra -Werror -Wpedantic -Wfatal-errors -g && \
+./a.out
+```
+
+## Why do I need a hash table
+
+When you want to look for a value in an array, looping over it is simple and fast, but it has a time complexity of `O(n)`. This means that as the array gets really big, it can become slow to find an element in the array.
+
+Hash tables are incredibly useful for turning code that does an `O(n)` iteration over an entire array, into an `O(1)` operation that (on average) instantly finds the element, no matter the size of the array.
+
+It is important to keep in mind that iterating an array is most of the time going to be much faster in practice, since it is so simple. For this reason I recommend only upgrading arrays to hash tables in C once a profiler indicates iterating an array to be the cause of performance issues.
+
+## High-level explanation
+
 This [hash table](https://en.m.wikipedia.org/wiki/Hash_table) requires you to have an array of items that you want to hash. `main.c` contains a `persons` array of `person` structs. Each person has a name and an age.
 
 The [pigeonhole principle](https://en.wikipedia.org/wiki/Pigeonhole_principle) tells us that if we have 3 persons, and we're trying to fit them into 2 buckets, at least one bucket must contain more than one person.
@@ -10,7 +28,7 @@ Usually linked lists are implemented by having every node be `malloc()`ed separa
 
 I made these arrays are global in order to make the code easier to read, but you could of course just pass them as arguments to the functions.
 
-## How it works
+## Examples
 
 Let's assume that the bucket count is 2 for a moment.
 
@@ -62,14 +80,6 @@ chain starts at buckets[420 % 2] = buckets[0] = 3
 persons[2].name (= "carl") == "bob"? no => chain continues at i=0
 persons[0].name (= "trez") == "bob"? no => chain continues at i=-1
 i=-1 is the sentinel index, so "bob" is not in the hash table
-```
-
-## Running
-
-```bash
-clear && \
-gcc main.c -Wall -Wextra -Werror -Wpedantic -Wfatal-errors -g && \
-./a.out
 ```
 
 ## Credits
