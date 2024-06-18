@@ -37,8 +37,8 @@ Bucket[i] has the value of the last entry that has bucket_index equal to i
 One asterisk * indicates the start of a chain
 
     name =            | hash =      bucket_index =  chain =
- i  persons[i-1].name | hash(name)  hash % nbucket  chains[i]
---  ----------------- | ----------  --------------  ---------
+ i  persons[i-1].name | hash(name)  hash % nbucket  chains[i-1]
+--  ----------------- | ----------  --------------  -----------
  0  <SENTINEL>        |
  1  trez              |  42         0               0 <-\
  2  john              |  69         1 *             0   |
