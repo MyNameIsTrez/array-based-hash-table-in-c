@@ -45,7 +45,7 @@ One asterisk * indicates the start of a chain
  3  carl              |  0          0 *             1 --/
 ```
 
-Let's test this table using `get_person()` its algorithm:
+Let's try this table, using the algorithm `get_person()` in `main.c` uses:
 
 1. `john`:
 ```
