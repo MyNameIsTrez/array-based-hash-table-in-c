@@ -39,7 +39,7 @@ One asterisk * indicates the start of a chain
     name =            | hash =      bucket_index =  chain =
  i  persons[i-1].name | hash(name)  hash % nbucket  chains[i]
 --  ----------------- | ----------  --------------  ---------
- 0  <SENTINEL>        |
+ 0  [<SENTINEL>](https://en.wikipedia.org/wiki/Sentinel_value)        |
  1  trez              |  0          0               0 <-\
  2  john              |  1          1 *             0   |
  3  carl              |  0          0 *             1 --/
