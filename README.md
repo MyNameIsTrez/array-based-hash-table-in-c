@@ -24,7 +24,7 @@ The program hashes the person structs based on their names, so let's use an imag
 2. `hash("john")` returns 1
 3. `hash("carl")` returns 0
 
-Here's how those hashes are used to give `buckets` and `chains` their values, where `nbucket` is `BUCKET_COUNT`:
+Here's how those hashes are used to give `buckets` and `chains` their values, where `nbucket` is `BUCKET_COUNT`, and `<SENTINEL>` is a [sentinel value](https://en.wikipedia.org/wiki/Sentinel_value).
 
 ```
 Bucket[i] has the value of the last entry that has bucket_index equal to i
@@ -39,7 +39,7 @@ One asterisk * indicates the start of a chain
     name =            | hash =      bucket_index =  chain =
  i  persons[i-1].name | hash(name)  hash % nbucket  chains[i]
 --  ----------------- | ----------  --------------  ---------
- 0  [<SENTINEL>](https://en.wikipedia.org/wiki/Sentinel_value)        |
+ 0  <SENTINEL>        |
  1  trez              |  0          0               0 <-\
  2  john              |  1          1 *             0   |
  3  carl              |  0          0 *             1 --/
