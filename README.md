@@ -90,7 +90,9 @@ In this case however we're assuming that the hash table is only built once the e
 
 ![Screenshot of profiling](profile.png)
 
-I encourage you to scrutinize my tests, but my important takeaway here is that given enough memory, a hash table will always take pretty much zero time, whereas an array starts taking a noticeable amount of time between `time_array(100)` and `time_array(1000)` (with `ROUNDS` being `10000`).
+I encourage you to scrutinize my tests, but my important takeaway here is that given enough memory, a hash table will always take pretty much zero time, whereas `time_array` starts taking a noticeable amount of time when its search limit argument is around 1000.
+
+If you keep in mind however that `ROUNDS` is causing every search to be repeated 10000 times, the correct conclusion here is that searching an array with 100k elements only took around 2.1 milliseconds (so not 21.28 seconds).
 
 Here's the command I used to produce this screenshot:
 
