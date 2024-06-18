@@ -4,7 +4,7 @@
 #include <string.h>
 
 #define MAX_PERSONS 420420
-#define BUCKET_COUNT 420
+#define BUCKET_COUNT 32771 // From https://sourceware.org/git/?p=binutils-gdb.git;a=blob;f=bfd/elflink.c;h=6db6a9c0b4702c66d73edba87294e2a59ffafcf5;hb=refs/heads/master#l6560
 
 struct person {
 	char *name;
