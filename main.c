@@ -4,7 +4,6 @@
 #include <string.h>
 
 #define MAX_PERSONS 420420
-#define BUCKET_COUNT 32771 // From https://sourceware.org/git/?p=binutils-gdb.git;a=blob;f=bfd/elflink.c;h=6db6a9c0b4702c66d73edba87294e2a59ffafcf5;hb=refs/heads/master#l6560
 
 struct person {
 	char *name;
@@ -14,7 +13,7 @@ struct person {
 static struct person persons[MAX_PERSONS];
 static size_t persons_size;
 
-static uint32_t buckets[BUCKET_COUNT];
+static uint32_t buckets[MAX_PERSONS];
 
 static uint32_t chains[MAX_PERSONS];
 static size_t chains_size;
@@ -31,7 +30,7 @@ static uint32_t elf_hash(const char *namearg) {
 
 static struct person *get_person(char *name) {
 	uint32_t hash = elf_hash(name);
-	uint32_t bucket_index = hash % BUCKET_COUNT;
+	uint32_t bucket_index = hash % persons_size;
 
 	uint32_t i = buckets[bucket_index];
 
@@ -59,13 +58,13 @@ static void push_chain(uint32_t chain) {
 }
 
 static void hash_persons(void) {
-	memset(buckets, UINT32_MAX, BUCKET_COUNT * sizeof(uint32_t));
+	memset(buckets, UINT32_MAX, persons_size * sizeof(uint32_t));
 
 	chains_size = 0;
 
 	for (size_t i = 0; i < persons_size; i++) {
 		uint32_t hash = elf_hash(persons[i].name);
-		uint32_t bucket_index = hash % BUCKET_COUNT;
+		uint32_t bucket_index = hash % persons_size;
 
 		push_chain(buckets[bucket_index]);
 

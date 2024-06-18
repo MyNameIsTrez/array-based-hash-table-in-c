@@ -12,7 +12,7 @@ I made these arrays are global in order to make the code easier to read, but you
 
 ## How it works
 
-Let's assume that `#define BUCKET_COUNT 420` has been changed from 420 to 2 for a moment.
+Let's assume that the bucket count is 2 for a moment.
 
 `main()` then pushes into the `persons` array in this order:
 1. `trez`, with an age of 7
@@ -24,7 +24,7 @@ The program hashes the person structs based on their names, so let's use an imag
 2. `hash("john")` returns 69
 3. `hash("carl")` returns 38
 
-Here's how those hashes are used to give `buckets` and `chains` their values, where `nbucket` is `BUCKET_COUNT`, and `-1` is the [sentinel value](https://en.wikipedia.org/wiki/Sentinel_value).
+Here's how those hashes are used to give `buckets` and `chains` their values, where `nbucket` is the number of buckets, and `-1` is the [sentinel value](https://en.wikipedia.org/wiki/Sentinel_value).
 
 ```
 Bucket[i] has the value of the last entry that has bucket_index equal to i
@@ -71,8 +71,6 @@ clear && \
 gcc main.c -Wall -Wextra -Werror -Wpedantic -Wfatal-errors -g && \
 ./a.out
 ```
-
-If you edit the `#define BUCKET_COUNT 420` line to `#define BUCKET_COUNT 1`, you'll see that it still works!
 
 ## Credits
 
