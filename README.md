@@ -50,7 +50,7 @@ Let's verify this table, using the algorithm `get_person()` in `main.c` uses:
 1. `john`:
 ```
 hash("john") = 1
-chain starts at buckets[1 % 2] = bucket[1] = 2
+chain starts at buckets[1 % 2] = buckets[1] = 2
 
 persons[2-1].name (= "john") == "john"? yes => "john" found at persons index 1
 ```
@@ -58,7 +58,7 @@ persons[2-1].name (= "john") == "john"? yes => "john" found at persons index 1
 2. `bob`:
 ```
 hash("bob") = 0
-chain starts at buckets[0 % 2] = bucket[0] = 3
+chain starts at buckets[0 % 2] = buckets[0] = 3
 
 persons[3-1].name (= "carl") == "bob"? no => chain continues at i=1
 persons[1-1].name (= "trez") == "bob"? no => chain continues at i=0
