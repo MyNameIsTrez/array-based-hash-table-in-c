@@ -20,9 +20,9 @@ Let's assume that `#define BUCKET_COUNT 420` has been changed from 420 to 2 for 
 3. `carl`, with an age of 69
 
 The program hashes the person structs based on their names, so let's use an imaginary `hash()` function:
-1. `hash("trez")` returns 0
-2. `hash("john")` returns 1
-3. `hash("carl")` returns 0
+1. `hash("trez")` returns 42
+2. `hash("john")` returns 69
+3. `hash("carl")` returns 38
 
 Here's how those hashes are used to give `buckets` and `chains` their values, where `nbucket` is `BUCKET_COUNT`, and `<SENTINEL>` is a [sentinel value](https://en.wikipedia.org/wiki/Sentinel_value).
 
@@ -40,25 +40,25 @@ One asterisk * indicates the start of a chain
  i  persons[i-1].name | hash(name)  hash % nbucket  chains[i]
 --  ----------------- | ----------  --------------  ---------
  0  <SENTINEL>        |
- 1  trez              |  0          0               0 <-\
- 2  john              |  1          1 *             0   |
- 3  carl              |  0          0 *             1 --/
+ 1  trez              |  42         0               0 <-\
+ 2  john              |  69         1 *             0   |
+ 3  carl              |  38         0 *             1 --/
 ```
 
 Let's verify this table, using the algorithm `get_person()` in `main.c` uses:
 
 1. `john`:
 ```
-hash("john") = 1
-chain starts at buckets[1 % 2] = buckets[1] = 2
+hash("john") = 69
+chain starts at buckets[69 % 2] = buckets[1] = 2
 
 persons[2-1].name (= "john") == "john"? yes => "john" found at persons index 1
 ```
 
 2. `bob`:
 ```
-hash("bob") = 0
-chain starts at buckets[0 % 2] = buckets[0] = 3
+hash("bob") = 420
+chain starts at buckets[420 % 2] = buckets[0] = 3
 
 persons[3-1].name (= "carl") == "bob"? no => chain continues at i=1
 persons[1-1].name (= "trez") == "bob"? no => chain continues at i=0
