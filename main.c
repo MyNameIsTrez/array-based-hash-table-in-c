@@ -14,7 +14,6 @@ static struct person persons[MAX_PERSONS];
 static size_t persons_size;
 
 static uint32_t buckets[MAX_PERSONS];
-
 static uint32_t chains[MAX_PERSONS];
 static size_t chains_size;
 
