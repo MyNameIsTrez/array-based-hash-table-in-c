@@ -28,8 +28,7 @@ static uint32_t elf_hash(const char *namearg) {
 }
 
 static uint32_t get_bucket_index(char *name, size_t size) {
-	uint32_t hash = elf_hash(name);
-	return hash % size;
+	return elf_hash(name) % size;
 }
 
 static struct person *get_person(char *name) {
