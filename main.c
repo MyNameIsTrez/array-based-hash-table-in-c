@@ -49,14 +49,6 @@ static struct person *get_person(char *name) {
 	return persons + i;
 }
 
-static void push_chain(uint32_t chain) {
-	if (chains_size >= MAX_PERSONS) {
-		fprintf(stderr, "There are more than %d chains, exceeding MAX_PERSONS\n", MAX_PERSONS);
-		exit(EXIT_FAILURE);
-	}
-	chains[chains_size++] = chain;
-}
-
 static void hash_persons(void) {
 	memset(buckets, UINT32_MAX, persons_size * sizeof(uint32_t));
 
@@ -66,7 +58,7 @@ static void hash_persons(void) {
 		uint32_t hash = elf_hash(persons[i].name);
 		uint32_t bucket_index = hash % persons_size;
 
-		push_chain(buckets[bucket_index]);
+		chains[chains_size++] = buckets[bucket_index];
 
 		buckets[bucket_index] = i;
 	}
