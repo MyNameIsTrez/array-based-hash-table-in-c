@@ -15,7 +15,6 @@ static size_t persons_size;
 
 static uint32_t buckets[MAX_PERSONS];
 static uint32_t chains[MAX_PERSONS];
-static size_t chains_size;
 
 // From https://sourceware.org/git/?p=binutils-gdb.git;a=blob;f=bfd/elf.c#l193
 static uint32_t elf_hash(const char *namearg) {
@@ -52,7 +51,7 @@ static struct person *get_person(char *name) {
 static void hash_persons(void) {
 	memset(buckets, UINT32_MAX, persons_size * sizeof(uint32_t));
 
-	chains_size = 0;
+	size_t chains_size = 0;
 
 	for (size_t i = 0; i < persons_size; i++) {
 		uint32_t bucket_index = get_bucket_index(persons[i].name, persons_size);
