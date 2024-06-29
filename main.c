@@ -26,12 +26,8 @@ static uint32_t elf_hash(const char *namearg) {
 	return h & 0x0fffffff;
 }
 
-static uint32_t get_bucket_index(char *name, size_t size) {
-	return elf_hash(name) % size;
-}
-
 static struct person *get_person(char *name) {
-	uint32_t i = buckets[get_bucket_index(name, persons_size)];
+	uint32_t i = buckets[elf_hash(name) % persons_size];
 
 	while (1) {
 		if (i == UINT32_MAX) {
@@ -54,7 +50,7 @@ static void hash_persons(void) {
 	size_t chains_size = 0;
 
 	for (size_t i = 0; i < persons_size; i++) {
-		uint32_t bucket_index = get_bucket_index(persons[i].name, persons_size);
+		uint32_t bucket_index = elf_hash(persons[i].name) % persons_size;
 
 		chains[chains_size++] = buckets[bucket_index];
 
