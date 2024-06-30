@@ -165,7 +165,7 @@ int main(void) {
 	printf("%d\n", get_person("trez")->age); // Prints "7"
 	printf("%d\n", get_person("john")->age); // Prints "42"
 	printf("%d\n", get_person("carl")->age); // Prints "69"
-	printf("%p\n", (void *)get_person("bob")); // Prints "(null)"
+	printf("%p\n", (void *)get_person("bob")); // Prints "(nil)"
 }
 ```
 
