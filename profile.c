@@ -23,9 +23,7 @@ static struct person persons[MAX_PERSONS];
 static size_t persons_size;
 
 static uint32_t buckets[MAX_PERSONS];
-
 static uint32_t chains[MAX_PERSONS];
-static size_t chains_size;
 
 static double get_elapsed_seconds(struct timespec start, struct timespec end) {
 	return (double)(end.tv_sec - start.tv_sec) + 1.0e-9 * (double)(end.tv_nsec - start.tv_nsec);
@@ -107,24 +105,13 @@ static void time_hash_table(void) {
 	printf("time_hash_table() had %zu/%d hits, taking %.2f seconds\n", hits, ROUNDS, get_elapsed_seconds(start, end));
 }
 
-static void push_chain(uint32_t chain) {
-	if (chains_size >= MAX_PERSONS) {
-		fprintf(stderr, "There are more than %d chains, exceeding MAX_PERSONS\n", MAX_PERSONS);
-		exit(EXIT_FAILURE);
-	}
-	chains[chains_size++] = chain;
-}
-
 static void hash_persons(void) {
 	memset(buckets, UINT32_MAX, persons_size * sizeof(uint32_t));
 
-	chains_size = 0;
-
 	for (size_t i = 0; i < persons_size; i++) {
-		uint32_t hash = elf_hash(persons[i].name);
-		uint32_t bucket_index = hash % persons_size;
+		uint32_t bucket_index = elf_hash(persons[i].name) % persons_size;
 
-		push_chain(buckets[bucket_index]);
+		chains[i] = buckets[bucket_index];
 
 		buckets[bucket_index] = i;
 	}
